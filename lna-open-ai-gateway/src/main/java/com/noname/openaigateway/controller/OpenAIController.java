@@ -24,7 +24,7 @@ public class OpenAIController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping(value = "/transcribe", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/transcription", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<TranscriptionResponseDTO> transcribeAudio(@RequestParam("file") MultipartFile file) {
         TranscriptionResponseDTO response = openAIService.transcribeAudio(file);
         return ResponseEntity.ok(response);
