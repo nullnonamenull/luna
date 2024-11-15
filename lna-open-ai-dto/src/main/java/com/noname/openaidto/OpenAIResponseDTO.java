@@ -1,4 +1,4 @@
-package com.noname.lnaopenaidto;
+package com.noname.openaidto;
 
 import lombok.Data;
 

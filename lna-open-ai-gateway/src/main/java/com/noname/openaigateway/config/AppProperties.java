@@ -14,4 +14,5 @@ public class AppProperties {
     private String completionsUrl;
     private String imagesUrl;
     private String embeddingsUrl;
+    private String transcriptionUrl;
 }

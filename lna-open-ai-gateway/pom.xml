@@ -37,8 +37,8 @@
         </dependency>
         <dependency>
             <groupId>com.noname</groupId>
-            <artifactId>open-ai-dto</artifactId>
-            <version>0.0.1</version>
+            <artifactId>lna-open-ai-dto</artifactId>
+            <version>0.0.2</version>
         </dependency>
     </dependencies>
 
