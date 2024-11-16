@@ -10,9 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "luna.open-ai")
 public class AppProperties {
+
     private String apiKey;
     private String completionsUrl;
     private String imagesUrl;
     private String embeddingsUrl;
     private String transcriptionUrl;
+    private String imageDescriptionUrl;
+
 }

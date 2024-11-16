@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TranscriptionResponseDTO {
+public class ImageDescriptionResponseDTO {
     private String text;
 }
