@@ -26,14 +26,14 @@ public class OpenAIController {
     }
 
     @PostMapping(value = "/transcription", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<TranscriptionResponseDTO> transcribeAudio(@RequestParam("file") MultipartFile file) {
-        TranscriptionResponseDTO response = openAIService.transcribeAudio(file);
+    public ResponseEntity<TranscriptionResponseDTO> transcribeAudio(@RequestParam("audio") MultipartFile audio) {
+        TranscriptionResponseDTO response = openAIService.transcribeAudio(audio);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = "/image-description", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ImageDescriptionResponseDTO> describeImage(@RequestParam("file") MultipartFile file) {
-        ImageDescriptionResponseDTO response = openAIService.describeImage(file);
+    public ResponseEntity<ImageDescriptionResponseDTO> describeImage(@RequestParam("image") MultipartFile image) {
+        ImageDescriptionResponseDTO response = openAIService.describeImage(image);
         return ResponseEntity.ok(response);
     }
 

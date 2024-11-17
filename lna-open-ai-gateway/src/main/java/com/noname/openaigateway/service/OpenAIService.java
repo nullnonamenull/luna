@@ -116,6 +116,7 @@ public class OpenAIService {
         }
     }
 
+
     private static HttpEntity<String> getStringHttpEntity(String base64Image, HttpHeaders headers) {
         String payload = String.format(
                 """
@@ -137,7 +138,6 @@ public class OpenAIService {
 
         return new HttpEntity<>(payload, headers);
     }
-
 
     private String encodeFileToBase64(MultipartFile file) {
         try {
