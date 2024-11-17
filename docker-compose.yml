@@ -1,0 +1,14 @@
+services:
+  postgres-calendar-api:
+    image: postgres:latest
+    container_name: postgres-calendar-api
+    environment:
+      POSTGRES_USER: calendar
+      POSTGRES_PASSWORD: calendar
+      POSTGRES_DB: calendar
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./lna-calendar-api/init-db:/docker-entrypoint-initdb.d
+#    networks:
+#      - luna-network

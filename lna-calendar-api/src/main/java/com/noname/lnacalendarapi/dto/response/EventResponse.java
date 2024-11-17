@@ -18,33 +18,19 @@ import java.util.UUID;
 public class EventResponse {
 
     private UUID id;
-
     private String title;
-
     private String description;
-
     private OffsetDateTime startTime;
-
     private OffsetDateTime endTime;
-
     private String location;
-
     private EventType eventType;
-
     private Set<String> tags;
-
     private Priority priority;
-
     private boolean allDay;
-
     private String recurrenceRule;
-
     private String notes;
-
     private boolean isCompleted;
-
     private OffsetDateTime createdAt;
-
     private OffsetDateTime updatedAt;
 
 }
