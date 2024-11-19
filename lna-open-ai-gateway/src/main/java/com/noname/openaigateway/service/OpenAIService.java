@@ -1,11 +1,9 @@
 package com.noname.openaigateway.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.noname.openaidto.ImageDescriptionResponseDTO;
-import com.noname.openaidto.OpenAIRequestDTO;
-import com.noname.openaidto.OpenAIResponseDTO;
-import com.noname.openaidto.TranscriptionResponseDTO;
+import com.noname.openaidto.*;
 import com.noname.openaigateway.config.AppProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -21,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -115,6 +114,41 @@ public class OpenAIService {
             throw new RuntimeException("Error communicating with Image Description API: " + e.getMessage(), e);
         }
     }
+
+    public OpenAIVectorResponseDTO generateVector(OpenAIVectorRequestDTO requestDTO) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(appProperties.getApiKey());
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String payload = String.format(
+                "{\"model\": \"%s\", \"input\": \"%s\"}",
+                requestDTO.getModel(),
+                requestDTO.getInput()
+        );
+
+        try {
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(
+                    appProperties.getEmbeddingsUrl(),
+                    new HttpEntity<>(payload, headers),
+                    String.class
+            );
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(responseEntity.getBody());
+            JsonNode embeddingNode = rootNode.path("data").get(0).path("embedding");
+
+            List<Float> vector = objectMapper.convertValue(embeddingNode, new TypeReference<>() {});
+
+            return new OpenAIVectorResponseDTO(vector, requestDTO.getModel(), requestDTO.getInput());
+
+        } catch (HttpClientErrorException e) {
+            throw new RuntimeException("OpenAI API error: " + e.getResponseBodyAsString(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error communicating with OpenAI API: " + e.getMessage(), e);
+        }
+    }
+
+
 
 
     private static HttpEntity<String> getStringHttpEntity(String base64Image, HttpHeaders headers) {
