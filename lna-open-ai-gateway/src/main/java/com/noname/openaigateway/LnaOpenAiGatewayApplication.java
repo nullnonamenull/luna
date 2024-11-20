@@ -7,10 +7,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @SpringBootApplication
 @EnableConfigurationProperties(AppProperties.class)
-public class OpenAiGatewayApplication {
+public class LnaOpenAiGatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OpenAiGatewayApplication.class, args);
+        SpringApplication.run(LnaOpenAiGatewayApplication.class, args);
     }
 
 }

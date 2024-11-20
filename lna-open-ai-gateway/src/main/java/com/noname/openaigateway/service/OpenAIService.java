@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noname.openaidto.*;
 import com.noname.openaigateway.config.AppProperties;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -28,31 +29,30 @@ public class OpenAIService {
     private final RestTemplate restTemplate;
     private final AppProperties appProperties;
 
-    public OpenAIResponseDTO sendPrompt(OpenAIRequestDTO requestDTO) {
+    public OpenAIResponseDTO sendPrompt(final OpenAIRequestDTO requestDTO) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(appProperties.getApiKey());
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String payload = String.format(
-                "{\"model\": \"%s\", \"messages\": [{\"role\": \"%s\", \"content\": \"%s\"}]}",
-                requestDTO.getModel(), requestDTO.getRole(), requestDTO.getPrompt()
-        );
-
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            String payload = objectMapper.writeValueAsString(requestDTO);
+
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(
                     appProperties.getCompletionsUrl(),
                     new HttpEntity<>(payload, headers),
                     String.class
             );
 
-            ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseEntity.getBody());
             String content = rootNode.path("choices").get(0).path("message").path("content").asText();
 
-            OpenAIResponseDTO simpleResponse = new OpenAIResponseDTO();
-            simpleResponse.setText(content);
-            return simpleResponse;
+            String formattedContent = StringEscapeUtils.unescapeJava(content);
 
+            OpenAIResponseDTO simpleResponse = new OpenAIResponseDTO();
+            simpleResponse.setText(formattedContent);
+            return simpleResponse;
         } catch (HttpClientErrorException e) {
             throw new RuntimeException("OpenAI API error: " + e.getResponseBodyAsString(), e);
         } catch (Exception e) {
@@ -137,7 +137,8 @@ public class OpenAIService {
             JsonNode rootNode = objectMapper.readTree(responseEntity.getBody());
             JsonNode embeddingNode = rootNode.path("data").get(0).path("embedding");
 
-            List<Float> vector = objectMapper.convertValue(embeddingNode, new TypeReference<>() {});
+            List<Float> vector = objectMapper.convertValue(embeddingNode, new TypeReference<>() {
+            });
 
             return new OpenAIVectorResponseDTO(vector, requestDTO.getModel(), requestDTO.getInput());
 
@@ -147,8 +148,6 @@ public class OpenAIService {
             throw new RuntimeException("Error communicating with OpenAI API: " + e.getMessage(), e);
         }
     }
-
-
 
 
     private static HttpEntity<String> getStringHttpEntity(String base64Image, HttpHeaders headers) {
