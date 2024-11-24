@@ -42,4 +42,5 @@ public class OpenAIController {
         return ResponseEntity.ok(response);
     }
 
+
 }
