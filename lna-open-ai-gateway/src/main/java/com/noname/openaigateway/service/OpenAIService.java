@@ -159,7 +159,7 @@ public class OpenAIService {
                             {
                               "role": "user",
                               "content": [
-                                {"type": "text", "text": "What is in this image?"},
+                                {"type": "text", "text": "What is in this image? Opisz dokladnie i po poslku! Podaj dokladnie kolor."},
                                 {"type": "image_url", "image_url": {"url": "data:image/jpeg;base64,%s"}}
                               ]
                             }
