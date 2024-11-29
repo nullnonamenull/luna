@@ -7,23 +7,23 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
-@Entity(name = "sessions")
-public class Session {
+@Entity(name = "messages")
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private UUID sessionId;
+    @Column(nullable = false)
+    private String content;
 
     @Column(nullable = false)
-    private OffsetDateTime createdAt;
+    private OffsetDateTime sentAt;
 
-    @Column
-    private OffsetDateTime closedAt;
+    @Column(nullable = false)
+    private String agent;
 
-    @Column
-    private OffsetDateTime deletedAt;
+    @Column(nullable = false)
+    private UUID session;
 
 }

@@ -159,7 +159,8 @@ public class OpenAIService {
                             {
                               "role": "user",
                               "content": [
-                                {"type": "text", "text": "What is in this image? Opisz dokladnie i po poslku! Podaj dokladnie kolor."},
+                                {"type": "text", "text": "Zwroc dokladnie odczytany slowo w slowo tekst z obrazka lub jesli jest obraz to zwroc precyzyjny opis obrazka. 
+                                Jesli zwracasz opis obrazka a nie tekstu z obrazka to na poczatku napisz, ze na tej stronie jest tylko obrazek i co dokladnie przedstawia."},
                                 {"type": "image_url", "image_url": {"url": "data:image/jpeg;base64,%s"}}
                               ]
                             }

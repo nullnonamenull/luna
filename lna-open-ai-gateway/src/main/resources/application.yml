@@ -1,3 +1,8 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
 luna:
   open-ai:
     completions-url: "https://api.openai.com/v1/chat/completions"
