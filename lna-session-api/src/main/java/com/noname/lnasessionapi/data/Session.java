@@ -29,13 +29,11 @@ public class Session {
     @Column
     private OffsetDateTime closedAt;
 
-    @Column
-    private OffsetDateTime deletedAt;
-
     @PrePersist
     private void onCreate() {
         if (createdAt == null) {
             createdAt = OffsetDateTime.now();
         }
     }
+
 }

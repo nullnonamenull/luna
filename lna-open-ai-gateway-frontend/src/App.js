@@ -7,7 +7,7 @@ import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 function App() {
     const [model, setModel] = useState('');
     const [messages, setMessages] = useState([{ role: 'user', content: 'Hello, world!' }]);
-    const [setResponseText] = useState('');
+    const [, setResponseText] = useState('');
     const [chatHistory, setChatHistory] = useState([]);
 
     const addMessage = () => {
