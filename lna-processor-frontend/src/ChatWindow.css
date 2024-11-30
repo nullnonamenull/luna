@@ -1,0 +1,43 @@
+.ChatWindow {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow: hidden; /* Prevent scrolling on the ChatWindow container */
+}
+
+.Messages {
+    flex: 1;
+    overflow-y: auto; /* Enable vertical scrolling for the messages */
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.Message {
+    max-width: 60%;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+}
+
+.Message.Pete {
+    background-color: #3a3a3c;
+    align-self: flex-start; /* Align to the left */
+    color: #ffffff;
+}
+
+.Message.Luna {
+    background-color: #0a84ff;
+    align-self: flex-end; /* Align to the right */
+    color: #ffffff;
+}
+
+.SenderName {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.MessageText {
+    word-wrap: break-word;
+}
