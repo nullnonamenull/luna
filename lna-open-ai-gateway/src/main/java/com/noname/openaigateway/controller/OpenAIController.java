@@ -24,15 +24,23 @@ public class OpenAIController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping(value = "/transcription", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<TranscriptionResponseDTO> transcribeAudio(@RequestParam("audio") MultipartFile audio) {
-        TranscriptionResponseDTO response = openAIService.transcribeAudio(audio);
+    @PostMapping(value = "/transcribe-audio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<TranscriptionResponseDTO> transcribeAudio(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "model", defaultValue = "whisper-1") String model
+    ) {
+        TranscriptionResponseDTO response = openAIService.transcribeAudio(file, model);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = "/image-description", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ImageDescriptionResponseDTO> describeImage(@RequestParam("image") MultipartFile image) {
-        ImageDescriptionResponseDTO response = openAIService.describeImage(image);
+    public ResponseEntity<ImageDescriptionResponseDTO> describeImage(
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("model") String model,
+            @RequestParam("question") String question,
+            @RequestParam(value = "max_tokens", defaultValue = "300") int maxTokens
+    ) {
+        ImageDescriptionResponseDTO response = openAIService.describeImageMultipart(image, model, question, maxTokens);
         return ResponseEntity.ok(response);
     }
 

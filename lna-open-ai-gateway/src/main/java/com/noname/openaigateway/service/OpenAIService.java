@@ -19,8 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +27,7 @@ public class OpenAIService {
 
     private final RestTemplate restTemplate;
     private final AppProperties appProperties;
+
 
     public OpenAIResponseDTO sendPrompt(final OpenAIRequestDTO requestDTO) {
         HttpHeaders headers = new HttpHeaders();
@@ -60,15 +60,14 @@ public class OpenAIService {
         }
     }
 
-
-    public TranscriptionResponseDTO transcribeAudio(MultipartFile file) {
+    public TranscriptionResponseDTO transcribeAudio(MultipartFile file, String model) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(appProperties.getApiKey());
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", file.getResource());
-        body.add("model", "whisper-1");
+        body.add("model", model);
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
@@ -84,14 +83,20 @@ public class OpenAIService {
         }
     }
 
-    public ImageDescriptionResponseDTO describeImage(MultipartFile file) {
+    public ImageDescriptionResponseDTO describeImageMultipart(MultipartFile file, String model, String question, int maxTokens) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(appProperties.getApiKey());
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         String base64Image = encodeFileToBase64(file);
+        List<Map<String, Object>> messages = getMaps(question, base64Image);
 
-        HttpEntity<String> requestEntity = getStringHttpEntity(base64Image, headers);
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("model", model);
+        requestBody.put("messages", messages);
+        requestBody.put("max_tokens", maxTokens);
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
 
         try {
             ResponseEntity<String> rawResponse = restTemplate.postForEntity(
@@ -150,29 +155,6 @@ public class OpenAIService {
     }
 
 
-    private static HttpEntity<String> getStringHttpEntity(String base64Image, HttpHeaders headers) {
-        String payload = String.format(
-                """
-                        {
-                          "model": "gpt-4o",
-                          "messages": [
-                            {
-                              "role": "user",
-                              "content": [
-                                {"type": "text", "text": "Zwroc dokladnie odczytany slowo w slowo tekst z obrazka lub jesli jest obraz to zwroc precyzyjny opis obrazka. 
-                                Jesli zwracasz opis obrazka a nie tekstu z obrazka to na poczatku napisz, ze na tej stronie jest tylko obrazek i co dokladnie przedstawia."},
-                                {"type": "image_url", "image_url": {"url": "data:image/jpeg;base64,%s"}}
-                              ]
-                            }
-                          ],
-                          "max_tokens": 300
-                        }""",
-                base64Image
-        );
-
-        return new HttpEntity<>(payload, headers);
-    }
-
     private String encodeFileToBase64(MultipartFile file) {
         try {
             byte[] fileBytes = file.getBytes();
@@ -180,6 +162,33 @@ public class OpenAIService {
         } catch (IOException e) {
             throw new RuntimeException("Error encoding file to Base64: " + e.getMessage(), e);
         }
+    }
+
+    private static List<Map<String, Object>> getMaps(String question, String base64Image) {
+        String dataUrl = "data:image/jpeg;base64," + base64Image;
+
+        Map<String, Object> imageUrlMap = new HashMap<>();
+        imageUrlMap.put("url", dataUrl);
+
+        Map<String, Object> imageMessage = new HashMap<>();
+        imageMessage.put("type", "image_url");
+        imageMessage.put("image_url", imageUrlMap);
+
+        Map<String, Object> textMessage = new HashMap<>();
+        textMessage.put("type", "text");
+        textMessage.put("text", question);
+
+        List<Map<String, Object>> contentList = new ArrayList<>();
+        contentList.add(textMessage);
+        contentList.add(imageMessage);
+
+        Map<String, Object> userMessage = new HashMap<>();
+        userMessage.put("role", "user");
+        userMessage.put("content", contentList);
+
+        List<Map<String, Object>> messages = new ArrayList<>();
+        messages.add(userMessage);
+        return messages;
     }
 
 }
