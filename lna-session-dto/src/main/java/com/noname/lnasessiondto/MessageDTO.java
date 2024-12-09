@@ -5,5 +5,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SessionCreationRequestDTO {
+public class MessageDTO {
+
+    private String content;
+    private String sender;
+
 }

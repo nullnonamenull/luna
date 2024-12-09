@@ -1,19 +1,23 @@
 import React from 'react';
 import './ChatList.css';
 
-function ChatList() {
-    const sessions = ['Session 1', 'Session 2', 'Session 3'];
-
+function ChatList({ sessions, onSelectSession, onNewSession }) {
     return (
         <div className="ChatList">
             <div className="ChatListItems">
-                {sessions.map((session, index) => (
-                    <div key={index} className="ChatListItem">
-                        {session}
+                {sessions.map((session) => (
+                    <div
+                        key={session.sessionId}
+                        className="ChatListItem"
+                        onClick={() => onSelectSession(session.sessionId)}
+                    >
+                        {session.sessionName}
                     </div>
                 ))}
             </div>
-            <button className="NewSessionButton">+ New Session</button>
+            <button className="NewSessionButton" onClick={onNewSession}>
+                + New Session
+            </button>
         </div>
     );
 }

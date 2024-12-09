@@ -3,33 +3,36 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    overflow: hidden; /* Prevent scrolling on the ChatWindow container */
+    overflow: hidden;
+    min-width: 0;
+    height: 100%; /* Dodano, aby wypełnić wysokość kontenera */
 }
 
 .Messages {
     flex: 1;
-    overflow-y: auto; /* Enable vertical scrolling for the messages */
+    overflow-y: auto; /* Dodano przewijanie */
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
 }
 
 .Message {
-    max-width: 60%;
+    max-width: 90%; /* Zmniejszona max-width dla responsywności */
     padding: 15px;
     margin-bottom: 10px;
     border-radius: 20px;
+    word-wrap: break-word;
 }
 
 .Message.Pete {
     background-color: #3a3a3c;
-    align-self: flex-start; /* Align to the left */
+    align-self: flex-start;
     color: #ffffff;
 }
 
 .Message.Luna {
     background-color: #0a84ff;
-    align-self: flex-end; /* Align to the right */
+    align-self: flex-end;
     color: #ffffff;
 }
 
@@ -40,4 +43,12 @@
 
 .MessageText {
     word-wrap: break-word;
+}
+
+/* Media Queries dla małych ekranów */
+@media (max-width: 768px) {
+    .ChatWindow {
+        flex: 0 0 100%; /* Okno czatu zajmuje całą szerokość */
+        max-width: 100%;
+    }
 }

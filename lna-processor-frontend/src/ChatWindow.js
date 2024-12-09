@@ -1,12 +1,17 @@
-import React from 'react';
-import MessageInput from './MessageInput';
+import React, { useEffect, useState } from 'react';
 import './ChatWindow.css';
 
-function ChatWindow() {
-    const messages = [
-        { sender: 'Pete', text: 'Hello' },
-        { sender: 'Luna', text: 'Hi there!' },
-    ];
+function ChatWindow({ sessionId }) {
+    const [messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        if (sessionId) {
+            fetch(`http://localhost:8080/api/session/${sessionId}/message`)
+                .then((response) => response.json())
+                .then((data) => setMessages(data.messages))
+                .catch((error) => console.error('Error fetching messages:', error));
+        }
+    }, [sessionId]);
 
     return (
         <div className="ChatWindow">
@@ -14,14 +19,15 @@ function ChatWindow() {
                 {messages.map((message, index) => (
                     <div
                         key={index}
-                        className={`Message ${message.sender === 'Pete' ? 'Pete' : 'Luna'}`}
+                        className={`Message ${message.sender === 'USER' ? 'Pete' : 'Luna'}`}
                     >
-                        <div className="SenderName">{message.sender}</div>
-                        <div className="MessageText">{message.text}</div>
+                        <div className="SenderName">
+                            {message.sender === 'USER' ? 'Pete' : 'Luna'}
+                        </div>
+                        <div className="MessageText">{message.content}</div>
                     </div>
                 ))}
             </div>
-            <MessageInput />
         </div>
     );
 }

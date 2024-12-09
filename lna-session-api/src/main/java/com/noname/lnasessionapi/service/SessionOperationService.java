@@ -1,4 +1,4 @@
-package com.noname.lnasessionapi.operation_service;
+package com.noname.lnasessionapi.service;
 
 
 import com.noname.lnasessionapi.data.Session;
@@ -17,4 +17,5 @@ public class SessionOperationService {
     public Session saveSession(Session session) {
         return sessionRepository.save(session);
     }
+
 }
