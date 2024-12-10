@@ -1,0 +1,20 @@
+.import-screen {
+    background-color: #121212;
+    color: white;
+    text-align: center;
+    height: 100vh;
+}
+
+header img {
+    height: 40px;
+}
+
+.file-options button {
+    margin: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+}

@@ -2,16 +2,16 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 20px;
     overflow: hidden;
     min-width: 0;
-    height: 100%; /* Dodano, aby wypełnić wysokość kontenera */
+    height: 100vh; /* Dodano, aby wypełnić wysokość kontenera */
 }
 
 .Messages {
     flex: 1;
     overflow-y: auto; /* Dodano przewijanie */
     margin-bottom: 20px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
 }
@@ -43,6 +43,39 @@
 
 .MessageText {
     word-wrap: break-word;
+}
+
+.InputBox {
+    position: sticky; /* Sticky trzyma pasek w ustalonym miejscu */
+    bottom: 0; /* Przyklej na dole ekranu */
+    display: flex;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f8f8f8;
+}
+
+.InputBox input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+}
+
+.InputBox button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #0a84ff;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.InputBox button:hover {
+    background-color: #005bb5;
 }
 
 /* Media Queries dla małych ekranów */
